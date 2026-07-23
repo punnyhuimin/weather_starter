@@ -4,9 +4,10 @@ import { HourlyStrip } from './HourlyStrip';
 import { TenDayForecast } from './TenDayForecast';
 import { TileGrid } from './Tiles';
 import { formatTemperature, formatTime } from './format';
+import { MapCard } from './map/MapCard';
 
 export function Hero() {
-  const { locations, refresh, refreshingId } = useStore();
+  const { locations, refresh, refreshingId, select } = useStore();
   const selected = useSelectedLocation();
 
   if (!selected) {
@@ -63,6 +64,7 @@ export function Hero() {
 
         <HourlyStrip periods={selected.weather?.forecast_periods} />
         <TenDayForecast weather={selected.weather} />
+        <MapCard locations={locations} selectedId={selected.id} onSelect={select} />
         <TileGrid weather={selected.weather} />
 
         <footer className="mt-2 flex flex-col items-center gap-3 pb-8 text-xs text-white/55">
