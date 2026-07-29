@@ -65,7 +65,7 @@ function WeatherMarker({ location, isSelected, onSelect }: WeatherMarkerProps) {
         iconAnchor: [68, 52],
         iconSize: [136, 56],
       }),
-    [isSelected, label.condition, label.temperature],
+    [isSelected, label.condition, label.temperature]
   );
 
   return (

@@ -21,7 +21,9 @@ export function Sidebar() {
   }, [locations, query]);
 
   return (
-    <aside className={`flex w-[22rem] shrink-0 flex-col gap-3 border-r ${currentTheme.borders} ${currentTheme.sidebar} p-4`}>
+    <aside
+      className={`flex w-[22rem] shrink-0 flex-col gap-3 border-r ${currentTheme.borders} ${currentTheme.sidebar} p-4`}
+    >
       <div className="relative">
         <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50" />
         <input
@@ -37,15 +39,21 @@ export function Sidebar() {
 
       <div className="flex flex-col gap-2 overflow-y-auto pr-1">
         {isLoading && locations.length === 0 ? (
-          <p className={`rounded-2xl border ${currentTheme.borders} bg-white/[0.06] p-4 text-sm ${currentTheme.text.tertiary}`}>
+          <p
+            className={`rounded-2xl border ${currentTheme.borders} bg-white/[0.06] p-4 text-sm ${currentTheme.text.tertiary}`}
+          >
             Loading locations…
           </p>
         ) : filtered.length === 0 && locations.length > 0 ? (
-          <p className={`rounded-2xl border ${currentTheme.borders} bg-white/[0.06] p-4 text-center text-sm ${currentTheme.text.tertiary}`}>
+          <p
+            className={`rounded-2xl border ${currentTheme.borders} bg-white/[0.06] p-4 text-center text-sm ${currentTheme.text.tertiary}`}
+          >
             No matches
           </p>
         ) : filtered.length === 0 ? (
-          <p className={`rounded-2xl border border-dashed ${currentTheme.borders} bg-white/[0.04] p-6 text-center text-sm ${currentTheme.text.tertiary}`}>
+          <p
+            className={`rounded-2xl border border-dashed ${currentTheme.borders} bg-white/[0.04] p-6 text-center text-sm ${currentTheme.text.tertiary}`}
+          >
             No locations yet. Add one above.
           </p>
         ) : (

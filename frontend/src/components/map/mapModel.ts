@@ -26,7 +26,8 @@ export function formatWeatherLabel(location: Location): WeatherLabel {
     Number.isFinite(location.weather.temperature_c)
       ? `${Math.round(location.weather.temperature_c)}\u00b0`
       : '--\u00b0';
-  const condition = location.weather.condition?.trim() || 'Conditions unavailable';
+  const condition =
+    location.weather.condition?.trim() || 'Conditions unavailable';
   const area =
     location.weather.area?.trim() ||
     `${location.latitude.toFixed(3)}, ${location.longitude.toFixed(3)}`;
@@ -48,6 +49,6 @@ export function escapeHtml(value: string): string {
         '>': '&gt;',
         '"': '&quot;',
         "'": '&#039;',
-      })[character] ?? character,
+      })[character] ?? character
   );
 }

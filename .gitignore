@@ -32,7 +32,6 @@ pnpm-debug.log*
 # Editors
 .vscode/
 .idea/
-.claude/
 .mise.toml
 .mise.local.toml
 *.swp

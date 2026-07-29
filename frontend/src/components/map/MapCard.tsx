@@ -19,8 +19,11 @@ export function MapCard({ locations, selectedId, onSelect }: MapCardProps) {
     if (!isFullscreen) return;
 
     const previousOverflow = document.body.style.overflow;
+    const expandRef = expandButtonRef.current;
     document.body.style.overflow = 'hidden';
-    const focusFrame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
+    const focusFrame = window.requestAnimationFrame(() =>
+      closeButtonRef.current?.focus()
+    );
 
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setIsFullscreen(false);
@@ -31,7 +34,7 @@ export function MapCard({ locations, selectedId, onSelect }: MapCardProps) {
       window.cancelAnimationFrame(focusFrame);
       document.removeEventListener('keydown', closeOnEscape);
       document.body.style.overflow = previousOverflow;
-      expandButtonRef.current?.focus();
+      expandRef?.focus();
     };
   }, [isFullscreen]);
 
@@ -59,7 +62,11 @@ export function MapCard({ locations, selectedId, onSelect }: MapCardProps) {
           </button>
         </header>
         <div className="h-72 sm:h-80">
-          <WeatherMap locations={locations} selectedId={selectedId} onSelect={onSelect} />
+          <WeatherMap
+            locations={locations}
+            selectedId={selectedId}
+            onSelect={onSelect}
+          />
         </div>
       </section>
 
@@ -73,14 +80,24 @@ export function MapCard({ locations, selectedId, onSelect }: MapCardProps) {
             aria-describedby="map-dialog-summary"
           >
             <div className="map-dialog__map">
-              <WeatherMap locations={locations} selectedId={selectedId} onSelect={onSelect} />
+              <WeatherMap
+                locations={locations}
+                selectedId={selectedId}
+                onSelect={onSelect}
+              />
             </div>
             <header className="map-dialog__header">
               <div>
-                <h2 id="map-dialog-title" className="text-sm font-semibold text-white">
+                <h2
+                  id="map-dialog-title"
+                  className="text-sm font-semibold text-white"
+                >
                   Weather Map
                 </h2>
-                <p id="map-dialog-summary" className="mt-0.5 text-xs text-white/65">
+                <p
+                  id="map-dialog-summary"
+                  className="mt-0.5 text-xs text-white/65"
+                >
                   {locationSummary}
                 </p>
               </div>
@@ -95,7 +112,7 @@ export function MapCard({ locations, selectedId, onSelect }: MapCardProps) {
               </button>
             </header>
           </div>,
-          document.body,
+          document.body
         )}
     </>
   );
