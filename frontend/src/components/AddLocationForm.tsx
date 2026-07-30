@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useStore } from '../state/store';
-import { PlusIcon } from './icons';
+import { PlusIcon, LocationIcon } from './icons';
 
 export function AddLocationForm() {
   const { isAdding, setAdding, create } = useStore();
@@ -9,12 +9,56 @@ export function AddLocationForm() {
   const [longitude, setLongitude] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   const cancel = () => {
     setLatitude('');
     setLongitude('');
     setSubmitError(null);
+    setLocationError(null);
     setAdding(false);
+  };
+
+  const onUseMyLocation = async () => {
+    setLocationError(null);
+
+    if (!navigator.geolocation) {
+      setLocationError(
+        'Geolocation is not supported in your browser. Please use the manual input instead.'
+      );
+      return;
+    }
+
+    setIsLocating(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          await create({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        } catch (err) {
+          setLocationError(
+            err instanceof Error ? err.message : 'Could not add location'
+          );
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      (error) => {
+        if (error.code === 1) {
+          setLocationError(
+            'Use my location is unavailable — location access was denied.'
+          );
+        } else {
+          setLocationError('Use my location is not available right now.');
+        }
+        setIsLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
   };
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -39,14 +83,30 @@ export function AddLocationForm() {
 
   if (!isAdding) {
     return (
-      <button
-        type="button"
-        onClick={() => setAdding(true)}
-        className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/[0.07] px-3 py-2.5 text-sm font-medium text-white/85 backdrop-blur-xl hover:bg-white/[0.12]"
-      >
-        <PlusIcon />
-        <span>Add Location</span>
-      </button>
+      <div className="grid gap-2">
+        <button
+          type="button"
+          onClick={() => setAdding(true)}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/[0.07] px-3 py-2.5 text-sm font-medium text-white/85 backdrop-blur-xl hover:bg-white/[0.12]"
+        >
+          <PlusIcon />
+          <span>Add Location</span>
+        </button>
+        <button
+          type="button"
+          onClick={onUseMyLocation}
+          disabled={isLocating}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/[0.07] px-3 py-2.5 text-sm font-medium text-white/85 backdrop-blur-xl hover:bg-white/[0.12] disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <LocationIcon />
+          <span>{isLocating ? 'Locating…' : 'Use my location'}</span>
+        </button>
+        {locationError && (
+          <p className="rounded-md border border-red-300/30 bg-red-500/15 px-2.5 py-1.5 text-xs text-red-100">
+            {locationError}
+          </p>
+        )}
+      </div>
     );
   }
 
